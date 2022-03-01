@@ -24,7 +24,7 @@ void setup() {
     debugSerial.println("Could not initialize the modem. Check your keys.");
     exit(0);                                            // And exits
   } else {                                              // Otherwise prints the text below to Serial
-    debugSerial.println("Model initialized succesfully!");
+    debugSerial.println("Modem initialized succesfully!");
   }
 
 }
