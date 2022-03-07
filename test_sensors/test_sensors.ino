@@ -33,27 +33,30 @@ void setup() {
   debugSerial.println("Modem initialized succesfully!");
   pinMode(buttonPin, INPUT);                            // Initialize the button pin on the board
   airQualitySensor.init(A4);                         // Initialize the air quality sensor
-  debugSerial.println("Initiliazing GPS...");
-  readCoordinates();
-  debugSerial.println("GPS Initialized");
+//  debugSerial.println("Initiliazing GPS...");
+//  readCoordinates();
+//  debugSerial.println("GPS Initialized");
 }
 
 void loop() {
-  bool buttonState = digitalRead(buttonPin);
-
-  if (buttonState == true) {
-    debugSerial.println("Button press detected, now sending...");
+    modem.wakeUp();
+    bool buttonState = digitalRead(buttonPin);
+    debugSerial.println("Now sending...");
     payload.reset();                                  // Resets the payload in case there's anything left
     payload.set("button", buttonState);                    // Sets the payload with our entity name "3" and the value of our button (true/1)
     payload.set("air_quality", airQualitySensor.slope());
     gps.readCoordinates();
-    GeoLocation geoLocation(gps.latitude, gps.longitude, gps.altitude);
-    debugSerial.println(gps.latitude);
-    payload.set("geo_location", geoLocation);
+//    GeoLocation geoLocation(gps.latitude, gps.longitude, gps.altitude);
+//    debugSerial.println(gps.latitude);
+//    payload.set("geo_location", geoLocation);
     int lightValue = analogRead(lightSensorPin);
+    debugSerial.println(lightValue);
     payload.set("light_value", lightValue);
-    modem.send(payload);
-  }
+    bool res = modem.send(payload);
+    debugSerial.println(res);
+    debugSerial.println(modem.getDataRate());
+    modem.sleep(30000);
+    delay(35000);
 }
 
 void readCoordinates() {
